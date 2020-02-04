@@ -53,7 +53,7 @@ already_needs_ci=false
 
 if [[ "$action" != "created" ]]; then
   echo This action should only be called when a comment is created on a pull request
-  exit 1
+  exit 0
 fi
 
 if [[ $comment_body == *"!needs_ci"* ]]; then
