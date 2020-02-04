@@ -73,8 +73,7 @@ if [[ $comment_body == *"!needs_ci"* ]]; then
         ;;
     esac
   done
-fi
-
-if [[ "$already_needs_ci" == false ]]; then
-  add_label "needs_ci"
+  if [[ "$already_needs_ci" == false ]]; then
+    add_label "needs_ci"
+  fi
 fi
