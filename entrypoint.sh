@@ -2,7 +2,7 @@
 # Varun Chopra <vchopra@eightfold.ai>
 #
 # This action runs every time a comment is added to a pull request.
-# Accepts the following commands: !shipit, !needs_ci
+# Accepts the following commands: shipit, needs_ci
 
 set -e
 
@@ -68,6 +68,9 @@ if [[ $comment_body == *"!needs_ci"* ]]; then
         ;;
       needs_ci)
         already_needs_ci=true
+        ;;
+      shipit)
+        remove_label "$label"
         ;;
       *)
         echo "Unknown label $label"
