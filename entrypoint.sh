@@ -94,6 +94,7 @@ if [[ $comment_body == *"shipit"* ]]; then
         ;;
       needs_ci)
         echo "Cannot ship a pull request that still needs ci."
+        exit 1
         ;;
       shipit)
         echo "Already shipping it!"
