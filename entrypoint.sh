@@ -50,9 +50,39 @@ number=$(jq --raw-output .issue.number "$GITHUB_EVENT_PATH")
 labels=$(jq --raw-output .issue.labels[].name "$GITHUB_EVENT_PATH")
 
 already_needs_ci=false
+already_shipit=false
 
 if [[ "$action" != "created" ]]; then
   echo This action should only be called when a comment is created on a pull request
+  exit 0
+fi
+
+if [[ $comment_body == "shipit" ]]; then
+  for label in $labels; do
+    case $label in
+      needs_revision)
+        remove_label "$label"
+        ;;
+      ci_verified)
+        remove_label "$label"
+        ;;
+      shipit)
+        already_shipit=true
+        ;;
+      needs_ci)
+        already_needs_ci=true
+        ;;
+      *)
+        echo "Unknown label $label"
+        ;;
+    esac
+  done
+  if [[ "$already_shipit" == false ]]; then
+    add_label "shipit"
+    if [[ "$already_needs_ci" == false ]]; then
+      add_label "needs_ci"
+    fi
+  fi
   exit 0
 fi
 
@@ -63,6 +93,9 @@ if [[ $comment_body == "needs_ci" ]]; then
         remove_label "$label"
         ;;
       ci_verified)
+        remove_label "$label"
+        ;;
+      shipit)
         remove_label "$label"
         ;;
       needs_ci)
