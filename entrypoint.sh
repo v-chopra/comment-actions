@@ -79,9 +79,9 @@ if [[ $comment_body == "shipit" ]]; then
   done
   if [[ "$already_shipit" == false ]]; then
     add_label "shipit"
-    if [[ "$already_needs_ci" == false ]]; then
-      add_label "needs_ci"
-    fi
+  fi
+  if [[ "$already_needs_ci" == false ]]; then
+    add_label "needs_ci"
   fi
   exit 0
 fi
