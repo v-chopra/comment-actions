@@ -81,7 +81,8 @@ if [[ $comment_body == "shipit" ]]; then
     add_label "shipit"
   fi
   if [[ "$already_needs_ci" == false ]]; then
-    add_label "needs_ci"
+    # add_label "needs_ci"
+    echo "We used to add needs_ci here but skipping it for now."
   fi
   exit 0
 fi
