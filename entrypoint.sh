@@ -82,6 +82,7 @@ if [[ $comment_body == "shipit" ]]; then
   done
   if [[ "$already_needs_revision" == true && "$already_needs_ci" == false ]]; then
     add_label "needs_ci"
+    remove_label "needs_revision"
   fi
   if [[ "$already_shipit" == false ]]; then
     add_label "shipit"
