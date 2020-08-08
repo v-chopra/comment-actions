@@ -61,10 +61,14 @@ if [[ $comment_body == "shipit" ]]; then
   for label in $labels; do
     case $label in
       needs_revision)
-        remove_label "$label"
+        # remove_label "$label"
+        echo "If needs_revision is present, we shouldn't be able to shipit"
+        # set already_shipit here. does the same work as already_shipit = TRUE OR needs_revision = TRUE
+        already_shipit=true
         ;;
       ci_verified)
-        remove_label "$label"
+        # remove_label "$label"
+        echo "We used to remove this when we added needs_ci with shipit"
         ;;
       shipit)
         already_shipit=true
