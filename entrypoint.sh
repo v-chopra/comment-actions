@@ -51,7 +51,7 @@ labels=$(jq --raw-output .issue.labels[].name "$GITHUB_EVENT_PATH")
 
 already_needs_ci=false
 already_shipit=false
-already_needs_revision=false
+already_verified=false
 
 if [[ "$action" != "created" ]]; then
   echo This action should only be called when a comment is created on a pull request
@@ -61,13 +61,8 @@ fi
 if [[ $comment_body == "shipit" ]]; then
   for label in $labels; do
     case $label in
-      needs_revision)
-        echo "If needs_revision is present, we shouldn add needs_ci with shipit"
-        already_needs_revision=true
-        ;;
       ci_verified)
-        # remove_label "$label"
-        echo "We used to remove this when we added needs_ci with shipit"
+        already_verified=true
         ;;
       shipit)
         already_shipit=true
@@ -80,9 +75,8 @@ if [[ $comment_body == "shipit" ]]; then
         ;;
     esac
   done
-  if [[ "$already_needs_revision" == true && "$already_needs_ci" == false ]]; then
+  if [[ "$already_verified" == false && "$already_needs_ci" == false ]]; then
     add_label "needs_ci"
-    remove_label "needs_revision"
   fi
   if [[ "$already_shipit" == false ]]; then
     add_label "shipit"
@@ -93,9 +87,6 @@ fi
 if [[ $comment_body == "needs_ci" ]]; then
   for label in $labels; do
     case $label in
-      needs_revision)
-        remove_label "$label"
-        ;;
       ci_verified)
         remove_label "$label"
         ;;
