@@ -50,6 +50,7 @@ number=$(jq --raw-output .issue.number "$GITHUB_EVENT_PATH")
 labels=$(jq --raw-output .issue.labels[].name "$GITHUB_EVENT_PATH")
 
 already_needs_ci=false
+already_needs_ci_3=false
 already_shipit=false
 already_verified=false
 
@@ -70,6 +71,9 @@ if [[ $comment_body == "shipit" ]]; then
       needs_ci)
         already_needs_ci=true
         ;;
+      "needs_ci:py3")
+        already_needs_ci_3=true
+        ;;
       *)
         echo "Unknown label $label"
         ;;
@@ -77,6 +81,9 @@ if [[ $comment_body == "shipit" ]]; then
   done
   if [[ "$already_verified" == false && "$already_needs_ci" == false ]]; then
     add_label "needs_ci"
+  fi
+  if [[ "$already_verified" == false && "$already_needs_ci_3" == false ]]; then
+    add_label "needs_ci:py3"
   fi
   if [[ "$already_shipit" == false ]]; then
     add_label "shipit"
